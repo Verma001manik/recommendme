@@ -2,14 +2,16 @@ import pandas as pd
 import json
 import os
 
-def convert_to_json(path, field_map=None, default_fields=None):
+def convert_to_json(path, field_map=None, default_fields=None, list_fields=None):
     """
     Converts a CSV file to a standardized JSON format.
-    - `field_map`: maps logical field names to CSV column names.
-    - `default_fields`: provides fallback values for missing fields.
 
-    returns : json 
-    Mostly title,desc are needed for something very simple 
+    - `field_map`: dict mapping logical keys to CSV column names.
+    - `default_fields`: dict of fallback values for missing fields.
+    - `list_fields`: set of field names (from logical keys) that should be treated as comma-separated lists.
+
+    Returns:
+        List of JSON records (only when testing).
     """
     df = pd.read_csv(path)
     data = []
@@ -17,25 +19,30 @@ def convert_to_json(path, field_map=None, default_fields=None):
     if field_map is None:
         raise ValueError("You must pass a field_map to tell the loader how to map fields")
 
+    list_fields = set(list_fields or [])  # default to empty set
+
     for i, row in df.iterrows():
-        def get_field(logical_key):
-            csv_col = field_map.get(logical_key, "")
-            if not csv_col or csv_col not in row:
-                return default_fields.get(logical_key, "") if default_fields else ""
-            return str(row[csv_col]) if pd.notna(row[csv_col]) else ""
+        item = {"id": i}
+        # print(f"item: {item}")
+        for logical_key, csv_col in field_map.items():
+            # print(f"row : {row}")
+            # print(f"logicalkey: {logical_key}, csvcol: {csv_col}")
+            val = ""
+            if csv_col in row and pd.notna(row[csv_col]) :
+                # print(f"csvcol:{csv_col} in row")
+                val = str(row[csv_col])
+            elif default_fields and logical_key in default_fields:
+                val = default_fields[logical_key]
 
-        tags_list = []
-        if 'tags' in field_map:
-            tags_raw = get_field("tags")
-            tags_list = [tag.strip() for tag in tags_raw.split(",") if tag.strip()]
-
-        data.append({
-            "id": i,
-            "title": get_field("title"),
-            "desc": get_field("desc"),
-            "tags": tags_list,
-            "difficulty": get_field("difficulty")
-        })
+            # Handle list fields (e.g., tags, genres)
+            if logical_key in list_fields:
+                item[logical_key] = [v.strip() for v in val.split(",") if v.strip()]
+            else:
+                item[logical_key] = val
+            # print(item)
+            
+         
+        data.append(item)
 
     os.makedirs("data", exist_ok=True)
     filename = os.path.splitext(os.path.basename(path))[0]
@@ -45,15 +52,6 @@ def convert_to_json(path, field_map=None, default_fields=None):
         json.dump(data, f, indent=2)
 
     print(f"Converted {path} → {output_path}")
-    #only return when testing
-    # return data
+    # return data only for testing
+    return data
 
-
-
-
-""""
-this code is working fine when called as a library func
-
-fix filename bug 
-
-"""

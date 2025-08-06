@@ -17,3 +17,5 @@ data/*.json
 
 data/
 embeddings/
+
+recommendme/__pycache__/

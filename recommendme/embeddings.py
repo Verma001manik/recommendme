@@ -7,11 +7,12 @@ from sentence_transformers import SentenceTransformer
 DEFAULT_MODEL = "BAAI/bge-small-en"
 
 class Embedding:
-    def __init__(self, path, model=DEFAULT_MODEL):
+    def __init__(self, path, model=DEFAULT_MODEL, text_template=None):
         self.model_name = model 
         self.path = path 
         self.filename = os.path.splitext(os.path.basename(path))[0]
         self.output_faiss_bin = f"embeddings/{self.filename}_faiss_index.bin"
+        self.text_template = text_template
 
     def generate_embeddings(self):
         """
@@ -24,10 +25,9 @@ class Embedding:
 
         model = SentenceTransformer(self.model_name)
 
-        texts = [
-            f"{p['title']}. {p['desc']} Difficulty: {p['difficulty']}. Tags: {', '.join(p['tags'])}"
-            for p in data
-        ]
+        #generalized
+        texts = self.build_texts(data)
+
 
         embeddings = np.array(model.encode(texts, normalize_embeddings=True)).astype("float32")
 
@@ -58,3 +58,25 @@ class Embedding:
             data = json.load(f)
 
         return data 
+    
+    def build_texts(self,data):
+        texts = []
+        for entry in data:
+            if self.text_template:
+                formated = self.text_template.format_map(DefaultDict(entry))
+                # print(f"formated: {formated}")
+
+                texts.append(formated)
+            else:
+                joined = ". ".join(str(v) for v in entry.values() if isinstance(v, str) or isinstance(v, list))
+                texts.append(joined)
+        return texts 
+    
+
+
+class DefaultDict(dict):
+    def __missing__(self, key):
+        return ""
+    
+
+
