@@ -1,4 +1,16 @@
-.venv
 .venv/
+venv/
+
 .pytest_cache/
+
+__pycache__/
+*.pyc
+
 tests/__pycache__/
+
+*.egg-info/
+dist/
+build/
+
+embeddings/
+data/*.json
