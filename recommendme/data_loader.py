@@ -45,3 +45,5 @@ def convert_to_json(path, field_map=None, default_fields=None):
         json.dump(data, f, indent=2)
 
     print(f"Converted {path} → {output_path}")
+    #only return when testing
+    # return data

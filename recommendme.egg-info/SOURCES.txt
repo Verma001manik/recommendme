@@ -1,0 +1,11 @@
+README.md
+pyproject.toml
+recommendme/__init__.py
+recommendme/data_loader.py
+recommendme/embeddings.py
+recommendme/search.py
+recommendme.egg-info/PKG-INFO
+recommendme.egg-info/SOURCES.txt
+recommendme.egg-info/dependency_links.txt
+recommendme.egg-info/top_level.txt
+tests/test_loader.py
