@@ -3,7 +3,13 @@ name = "recommendme"
 version = "0.1.0"
 description = "Book/movie/music recommendation system"
 authors = [{ name = "Your Name", email = "your@email.com" }]
-dependencies = []
+dependencies = [
+    "numpy",
+    "scikit-learn",
+    "tqdm",
+    "pytest",
+    "pandas"
+]
 
 [build-system]
 requires = ["setuptools"]

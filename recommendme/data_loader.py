@@ -38,7 +38,7 @@ def convert_to_json(path, field_map=None, default_fields=None):
         })
 
     os.makedirs("data", exist_ok=True)
-    filename = os.path.basename(path)
+    filename = os.path.splitext(os.path.basename(path))[0]
     output_path = f"data/{filename}.json"
 
     with open(output_path, 'w') as f:
@@ -47,3 +47,13 @@ def convert_to_json(path, field_map=None, default_fields=None):
     print(f"Converted {path} → {output_path}")
     #only return when testing
     # return data
+
+
+
+
+""""
+this code is working fine when called as a library func
+
+fix filename bug 
+
+"""

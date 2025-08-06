@@ -10,7 +10,7 @@ class Embedding:
     def __init__(self, path, model=DEFAULT_MODEL):
         self.model_name = model 
         self.path = path 
-        self.filename = os.path.basename(path)
+        self.filename = os.path.splitext(os.path.basename(path))[0]
         self.output_faiss_bin = f"embeddings/{self.filename}_faiss_index.bin"
 
     def generate_embeddings(self):
@@ -52,7 +52,7 @@ class Embedding:
 
 
     def get_metadata(self):
-        if not os.path.exists(f"embedding/{self.filename}_id_map.json") :
+        if not os.path.exists(f"embeddings/{self.filename}_id_map.json") :
             raise ValueError("Metadata file does not exists")
         with open(f"embeddings/{self.filename}_id_map.json", 'r') as f:
             data = json.load(f)

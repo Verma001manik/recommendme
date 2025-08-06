@@ -12,5 +12,8 @@ tests/__pycache__/
 dist/
 build/
 
-embeddings/
+embeddings/*.json
 data/*.json
+
+data/
+embeddings/
