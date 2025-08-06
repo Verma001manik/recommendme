@@ -1,0 +1,1 @@
+A lightweight Python library to load  datasets from CSV, convert them to JSON with structured metadata, generate vector embeddings using Sentence Transformers, and index them with FAISS for fast semantic search.
