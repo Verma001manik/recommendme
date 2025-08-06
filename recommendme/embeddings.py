@@ -35,6 +35,7 @@ class Embedding:
         
         dimension = embeddings.shape[1]
         index = faiss.IndexFlatL2(dimension)
+
         index.add(embeddings)
 
         # Save metadata
@@ -43,9 +44,17 @@ class Embedding:
 
         # Save FAISS index
         faiss.write_index(index, f"embeddings/{self.filename}_faiss_index.bin")
-        print("All done! FAISS index and metadata saved.")
 
     def get_faiss_embeddings(self):
         if not os.path.exists(self.output_faiss_bin):
             raise ValueError("FAISS index file does not exist. Generate embeddings first.")
         return faiss.read_index(self.output_faiss_bin)
+
+
+    def get_metadata(self):
+        if not os.path.exists(f"embedding/{self.filename}_id_map.json") :
+            raise ValueError("Metadata file does not exists")
+        with open(f"embeddings/{self.filename}_id_map.json", 'r') as f:
+            data = json.load(f)
+
+        return data 

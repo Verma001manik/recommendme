@@ -1,6 +1,6 @@
-# 📘 recommendme: A Minimal Library for Dataset Embedding & Search
+# Recommendme: A Minimal Library for Dataset Embedding & Search
 
-**recommendme** is a lightweight Python library to:
+**Recommendme** is a lightweight Python library to:
 - Load question/problem datasets from CSV or JSON.
 - Extract structured fields like title, description, tags, and difficulty.
 - Generate dense vector embeddings using [SentenceTransformers]
