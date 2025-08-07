@@ -23,23 +23,17 @@ def convert_to_json(path, field_map=None, default_fields=None, list_fields=None)
 
     for i, row in df.iterrows():
         item = {"id": i}
-        # print(f"item: {item}")
         for logical_key, csv_col in field_map.items():
-            # print(f"row : {row}")
-            # print(f"logicalkey: {logical_key}, csvcol: {csv_col}")
             val = ""
             if csv_col in row and pd.notna(row[csv_col]) :
-                # print(f"csvcol:{csv_col} in row")
                 val = str(row[csv_col])
             elif default_fields and logical_key in default_fields:
                 val = default_fields[logical_key]
 
-            # Handle list fields (e.g., tags, genres)
             if logical_key in list_fields:
                 item[logical_key] = [v.strip() for v in val.split(",") if v.strip()]
             else:
                 item[logical_key] = val
-            # print(item)
             
          
         data.append(item)

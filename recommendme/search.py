@@ -6,7 +6,7 @@ import os
 
 
 class SearchEngine:
-    def __init__(self, index_path, metadata_path, model_name="BAAI/bge-small-en", threshold=0.3):
+    def __init__(self, index_path, metadata_path, model_name="BAAI/bge-small-en", threshold=0.85):
         """
         index_path: Path to FAISS index .bin file
         metadata_path: Path to metadata JSON file
@@ -32,7 +32,7 @@ class SearchEngine:
 
         results = []
         for dist, idx in zip(distances[0], indices[0]):
-            if dist >= self.threshold:
+            if dist <= self.threshold:
                 continue  
             if exclude_id is not None and self.metadata[idx]["id"] == exclude_id:
                 continue  
